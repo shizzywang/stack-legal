@@ -11,11 +11,12 @@
 }
 
 .headline {
-  font-size: 2.2rem;
-  font-weight: 500;
+  font-size: 1.8rem;
+  font-weight: 400;
   color: #eae6ff;
-  margin-bottom: 18px;
+  margin-bottom: 6px;
   letter-spacing: 0.01em;
+  font-family: 'Gabarito', serif;
 }
 
 .description {
@@ -23,18 +24,21 @@
   color: #bdb7d2;
   margin-bottom: 38px;
   line-height: 1.6;
+  font-family: 'Gabarito';
 }
 
 .downloadRow {
   display: flex;
   gap: 16px;
   margin-bottom: 16px;
+  font-family: 'Gabarito';
 }
 
 .downloadBtn {
-  background: #232228;
+  background: #292929;
   color: #bdb7d2;
   border: none;
+  font-family: 'Gabarito';
   border-radius: 10px;
   padding: 12px 28px;
   font-size: 1rem;
@@ -45,7 +49,7 @@
 }
 
 .downloadBtn.active {
-  background: #35323e;
+  background: #292929;
   color: #fff;
   opacity: 1;
 }
@@ -61,7 +65,7 @@
 }
 
 .storeBtn {
-  background: #232228;
+  background: #292929;
   color: #eae6ff;
   border: none;
   border-radius: 8px;
@@ -71,10 +75,11 @@
   opacity: 0.8;
   cursor: pointer;
   transition: background 0.2s, color 0.2s, opacity 0.2s;
+  font-family: 'Gabarito';
 }
 
 .storeBtn:hover {
-  background: #35323e;
+  background: #292929;
   color: #fff;
   opacity: 1;
 } 

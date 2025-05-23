@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import styles from './ThreadCard.module.css';
+import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
+import UnfoldLessIcon from '@mui/icons-material/UnfoldLess';
 
 const getContrastingTextColor = (backgroundColor) => {
   const hex = backgroundColor.replace('#', '');
@@ -19,9 +21,23 @@ const DateButton = ({ date }) => (
 );
 
 const ExpandButton = ({ isExpanded, onClick }) => (
-  <button className={styles.expandButton} onClick={e => { e.stopPropagation(); onClick(); }}>
-    {isExpanded ? '−' : '+'}
-  </button>
+  <div
+    className={styles.expandButton}
+    onClick={e => { e.stopPropagation(); onClick(); }}
+    role="button"
+    aria-label={isExpanded ? 'Collapse' : 'Expand'}
+    tabIndex={0}
+    onKeyPress={e => { if (e.key === 'Enter' || e.key === ' ') { e.stopPropagation(); onClick(); } }}
+    style={{ outline: 'none', border: 'none', userSelect: 'none' }}
+  >
+    <span className={styles.animatedFade}>
+      {isExpanded ? (
+        <UnfoldLessIcon className={styles.expandIcon} key="less" />
+      ) : (
+        <UnfoldMoreIcon className={styles.expandIcon} key="more" />
+      )}
+    </span>
+  </div>
 );
 
 const ThreadCard = ({
@@ -34,14 +50,24 @@ const ThreadCard = ({
   stackName
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [height, setHeight] = useState(0);
+  const contentRef = useRef(null);
   const backgroundColor = color ? `#${color}` : '#000000';
   const textColor = getContrastingTextColor(backgroundColor);
+
+  // Animate height on expand/collapse
+  React.useEffect(() => {
+    if (isExpanded && contentRef.current) {
+      setHeight(contentRef.current.scrollHeight + 8);
+    } else {
+      setHeight(0);
+    }
+  }, [isExpanded, description]);
 
   return (
     <div
       className={styles.threadCard}
       style={{ backgroundColor, color: textColor }}
-      onClick={() => setIsExpanded(!isExpanded)}
     >
       {stackName && (
         <div className={styles.stackTitle} style={{ color: textColor }}>
@@ -51,18 +77,25 @@ const ThreadCard = ({
       <h2 className={styles.threadTitle} style={{ color: textColor }}>
         {title}
       </h2>
-      <div className={`${styles.threadContent} ${isExpanded ? styles.expanded : styles.collapsed}`}>
-        {description && (
-          <p className={styles.threadDescription} style={{ color: textColor }}>
-            {description}
-          </p>
-        )}
-        <div className={styles.threadMeta}>
-          {labelId && labelName && <LabelButton labelName={labelName} />}
-          {date && <DateButton date={date} />}
+      {description && (
+        <div
+          className={styles.threadContent}
+          style={{
+            height: `${height}px`,
+            opacity: isExpanded ? 1 : 0.7,
+            transition: 'height 0.5s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.5s',
+            overflow: 'hidden',
+            willChange: 'height, opacity',
+          }}
+        >
+          <div ref={contentRef} style={{ paddingBottom: '1px' }}>
+            <p className={styles.threadDescription} style={{ color: textColor }}>
+              {description}
+            </p>
+          </div>
         </div>
-      </div>
-      {(labelId || date || description) && (
+      )}
+      {description && (
         <ExpandButton isExpanded={isExpanded} onClick={() => setIsExpanded(!isExpanded)} />
       )}
     </div>

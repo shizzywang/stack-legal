@@ -5,15 +5,16 @@ import styles from './ThreadCardColumn.module.css';
 import threads from '../../data/threads.json';
 
 const CARD_HEIGHT = 110; // Just the card height
-const GAP = 10; // Ensure gap is exactly 10px
-const MIN_GAP = 10; // Minimum gap when cards are following
+const GAP = 6; // Base gap
+const MIN_GAP = 4; // Minimum gap
+const MAX_GAP = 8; // Maximum gap to prevent excessive spacing
 const THREAD_COUNT = threads.length;
 
 const ThreadCardColumn = () => {
   const containerRef = useRef(null);
   const scrollY = useMotionValue(0);
-  const ySpring = useSpring(scrollY, { stiffness: 60, damping: 30, mass: 0.5 });
-  const velocity = useVelocity(ySpring);
+  // Make scroll directly responsive without spring
+  const velocity = useVelocity(scrollY);
 
   // Calculate min and max scroll values
   const totalHeight = THREAD_COUNT * (CARD_HEIGHT + GAP) - GAP; // total height of all cards + gaps
@@ -34,7 +35,7 @@ const ThreadCardColumn = () => {
     // Only animate if user hasn't scrolled
     setTimeout(() => {
       if (!hasScrolled && scrollY.get() === 0) {
-        scrollY.set(-80, { type: 'spring', stiffness: 40, damping: 18 });
+        scrollY.set(-80, { type: 'spring', stiffness: 40, damping: 30 });
       }
     }, 400);
     return () => {
@@ -108,36 +109,46 @@ const ThreadCardColumn = () => {
     >
       <motion.div
         className={styles.threadList}
-        style={{ y: ySpring, display: 'flex', flexDirection: 'column', gap: '10px' }}
+        style={{ y: scrollY, display: 'flex', flexDirection: 'column', gap: '10px' }}
       >
         {threads.map((thread, idx) => {
-          // Enhanced inertia/lag effect
-          const velocitySpring = useSpring(0, {
-            stiffness: 120, // lower for more drag
-            damping: 18,    // lower for more follow-through
-            mass: 1 + idx * 0.35, // more mass per card for more lag
+          // Card position spring - gives cards their own weight
+          const cardSpring = useSpring(scrollY, {
+            stiffness: 50,  // Keep moderate stiffness for smooth movement
+            damping: 35,    // Increased damping to reduce bounce
+            mass: 1.2 + idx * 0.4, // Keep mass for inertia effect
           });
 
-          useEffect(() => {
-            const unsubscribe = velocity.onChange((v) => {
-              velocitySpring.set(v);
-            });
-            return () => unsubscribe();
-          }, [velocity, velocitySpring]);
+          // Calculate the offset from the base position
+          const offset = useTransform(
+            [cardSpring, scrollY],
+            ([spring, scroll]) => spring - scroll
+          );
 
-          const lagOffset = useTransform(velocitySpring, (v) => {
-            // More pronounced lag multiplier
-            const scaledVelocity = v * 0.022 * (idx + 1);
-            return Math.max(scaledVelocity, -(CARD_HEIGHT + GAP - MIN_GAP));
-          });
+          // Dynamic gap effect
+          const dynamicGap = useTransform(
+            [velocity, scrollY],
+            ([v, y]) => {
+              // Subtle gap compression based on velocity
+              const velocityEffect = Math.abs(v) * 0.02;
+              // Minimal scroll position effect
+              const scrollEffect = Math.abs(y) * 0.0002;
+              // Calculate gap with diminishing returns
+              const calculatedGap = GAP - (velocityEffect + scrollEffect) * (1 - idx * 0.15);
+              // Clamp the gap between MIN_GAP and MAX_GAP
+              return Math.min(Math.max(calculatedGap, MIN_GAP), MAX_GAP);
+            }
+          );
 
           return (
             <motion.div
               key={idx + '-' + thread.id}
               style={{
-                y: lagOffset,
+                y: offset,
                 position: 'relative',
                 zIndex: THREAD_COUNT - idx,
+                marginBottom: dynamicGap,
+                ...(idx === 0 ? { marginTop: '20px' } : {}),
               }}
             >
               <ThreadCard {...thread} />

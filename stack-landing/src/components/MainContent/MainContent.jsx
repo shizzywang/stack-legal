@@ -14,8 +14,8 @@ const MainContent = () => (
       <button className={styles.downloadBtn} disabled>Web</button>
     </div>
     <div className={styles.storeRow}>
-      <button className={styles.storeBtn}>🍏 Apple</button>
-      <button className={styles.storeBtn}>🤖 Playstore</button>
+      <a href="https://apps.apple.com/gb/app/stack-productivity/id6745231952" target="_blank" rel="noopener noreferrer" className={styles.storeBtn}>🍏 Apple</a>
+      <button className={styles.downloadBtn} disabled>🤖 Playstore</button>
     </div>
   </div>
 );

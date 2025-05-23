@@ -1,0 +1,25 @@
+.column {
+  width: 340px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 32px 12px 32px 0;
+  z-index: 2;
+  align-items: stretch;
+  /* No overflow-y, no scrollbar */
+}
+
+.column::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
+}
+
+.column::-webkit-scrollbar-thumb {
+  background: transparent;
+}
+
+.column::-webkit-scrollbar-track {
+  background: transparent;
+}

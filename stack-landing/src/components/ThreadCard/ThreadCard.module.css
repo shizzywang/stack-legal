@@ -1,0 +1,89 @@
+.threadCard {
+  margin: 0 0 18px 0;
+  padding: 18px 16px 32px 16px;
+  min-height: 50px;
+  border-radius: 16px;
+  position: relative;
+  transition: box-shadow 0.2s ease, transform 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  user-select: none;
+  will-change: transform;
+  width: 100%;
+  max-width: 320px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.threadTitle {
+  font-family: 'Platypi', serif;
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.threadDescription {
+  font-size: 18px;
+  opacity: 0.8;
+  margin-bottom: 25px;
+}
+
+.threadContent {
+  transition: max-height 0.5s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.5s;
+  overflow: hidden;
+}
+
+.expanded {
+  max-height: 1000px;
+  opacity: 1;
+}
+
+.collapsed {
+  max-height: 0;
+  opacity: 0.7;
+}
+
+.threadMeta {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.labelButton, .dateButton {
+  padding: 4px 12px;
+  border-radius: 8px;
+  border: none;
+  margin-right: 8px;
+  font-size: 14px;
+  background: rgba(255,255,255,0.15);
+  color: inherit;
+  cursor: pointer;
+}
+
+.expandButton {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.18);
+  color: inherit;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  font-weight: bold;
+  z-index: 2;
+}
+
+.stackTitle {
+  font-family: 'Gabarito', sans-serif;
+  font-weight: 500;
+  text-align: right;
+  font-size: 16px;
+  margin-bottom: 2px;
+  opacity: 0.7;
+}

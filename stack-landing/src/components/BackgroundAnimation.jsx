@@ -37,7 +37,7 @@ const BackgroundAnimation = () => {
   return (
     <iframe
       ref={iframeRef}
-      src="/attractors-bg.html"
+      src={`${import.meta.env.BASE_URL}attractors-bg.html`}
       style={{
         position: 'fixed',
         inset: 0,

@@ -4,11 +4,12 @@ import Footer from './components/Footer/Footer';
 import MainContent from './components/MainContent/MainContent';
 import styles from './App.module.css';
 import Logo from './components/Logo';
+import BackgroundAnimation from './components/BackgroundAnimation';
 
 function App() {
   return (
     <div className={styles.appRoot}>
-      <div id="background-animation" className={styles.background}></div>
+      <BackgroundAnimation />
       <div className={styles.logo}>
         <span>S</span>
         <span>t</span>

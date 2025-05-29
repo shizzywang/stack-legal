@@ -3,10 +3,9 @@ import styles from './MainContent.module.css';
 
 const MainContent = () => (
   <div className={styles.mainContent}>
-    <h1 className={styles.headline}>A simpler way to turn thoughts into action</h1>
+    <h1 className={styles.headline}>A simpler way to organise thoughts into action</h1>
     <p className={styles.description}>
-      Stack is an intuitive space to organise, reflect, and manifest.<br />
-      A place to take thoughts from the spirit and put them to the touch.
+      Stack is the place to take thoughts from the spirit and put them to the touch - a tactile space to quickly capture your ideas, notes, and to-dos.
     </p>
     <div className={styles.downloadRow}>
       <button className={styles.downloadBtn + ' ' + styles.active}>Mobile</button>

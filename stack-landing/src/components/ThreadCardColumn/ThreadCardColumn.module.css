@@ -23,3 +23,24 @@
 .column::-webkit-scrollbar-track {
   background: transparent;
 }
+
+@media (max-width: 768px) {
+  .column {
+    width: 100vw;
+    min-height: 140px;
+    padding: 16px 0 32px 0;
+    flex-direction: row;
+    align-items: flex-start;
+  }
+  .threadList {
+    flex-direction: row !important;
+    overflow-x: auto;
+    overflow-y: hidden;
+    gap: 12px;
+    width: 100vw;
+    height: 140px;
+    padding-left: 12px;
+    padding-right: 12px;
+    display: flex;
+  }
+}

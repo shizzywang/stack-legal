@@ -1,10 +1,9 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { motion, useMotionValue, useSpring, useVelocity, useTransform } from 'framer-motion';
 import ThreadCard from '../ThreadCard/ThreadCard';
 import styles from './ThreadCardColumn.module.css';
 import threads from '../../data/threads.json';
 
-const CARD_HEIGHT = 110; // Just the card height
 const GAP = 6; // Base gap
 const MIN_GAP = 4; // Minimum gap
 const MAX_GAP = 8; // Maximum gap to prevent excessive spacing
@@ -12,19 +11,49 @@ const THREAD_COUNT = threads.length;
 
 const ThreadCardColumn = () => {
   const containerRef = useRef(null);
+  const threadListRef = useRef(null);
   const scrollY = useMotionValue(0);
   // Make scroll directly responsive without spring
   const velocity = useVelocity(scrollY);
+  const [isMobile, setIsMobile] = useState(() => {
+    if (typeof window !== 'undefined' && window.matchMedia) {
+      return window.matchMedia('(max-width: 768px)').matches;
+    }
+    return false;
+  });
 
-  // Calculate min and max scroll values
-  const totalHeight = THREAD_COUNT * (CARD_HEIGHT + GAP) - GAP; // total height of all cards + gaps
-  const [containerHeight, setContainerHeight] = React.useState(0);
+  // Dynamically measure container and thread list heights
+  const [containerHeight, setContainerHeight] = useState(0);
+  const [totalHeight, setTotalHeight] = useState(0);
 
   useEffect(() => {
-    if (containerRef.current) {
-      setContainerHeight(containerRef.current.offsetHeight);
-    }
+    const updateHeights = () => {
+      if (containerRef.current) {
+        setContainerHeight(containerRef.current.offsetHeight);
+      }
+      if (threadListRef.current) {
+        setTotalHeight(threadListRef.current.offsetHeight);
+      }
+    };
+    updateHeights();
+    window.addEventListener('resize', updateHeights);
+    return () => window.removeEventListener('resize', updateHeights);
+  }, [threads.length]);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      if (window.matchMedia) {
+        setIsMobile(window.matchMedia('(max-width: 768px)').matches);
+      } else {
+        setIsMobile(window.innerWidth <= 768);
+      }
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
   }, []);
+
+  if (isMobile) return null;
 
   // Animate scroll on mount to hint scrollability
   useEffect(() => {
@@ -109,6 +138,7 @@ const ThreadCardColumn = () => {
     >
       <motion.div
         className={styles.threadList}
+        ref={threadListRef}
         style={{ y: scrollY, display: 'flex', flexDirection: 'column', gap: '10px' }}
       >
         {threads.map((thread, idx) => {

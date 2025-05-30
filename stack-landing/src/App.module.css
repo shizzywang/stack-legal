@@ -116,4 +116,31 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  .appRoot {
+    height: auto;
+    overflow: visible;
+  }
+  .layout {
+    flex-direction: column;
+    height: auto;
+    width: 100vw;
+    overflow: visible;
+  }
+  .leftColumn {
+    width: 100vw;
+    height: auto;
+    min-height: 100vh;
+    padding: 20px;
+    justify-content: center;
+    align-items: center;
+  }
+  .mainContent {
+    min-height: unset;
+  }
+  .rightColumn {
+    display: none;
+  }
 } 

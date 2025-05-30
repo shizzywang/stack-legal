@@ -19,12 +19,12 @@ export default function App() {
       <div className={styles.layout}>
         <div className={styles.leftColumn}>
           <MainContent />
+          <Footer />
         </div>
         <div className={styles.rightColumn}>
           <ThreadCardColumn />
         </div>
       </div>
-      <Footer />
       <div className={styles.cornerIcon}>
         <Logo height={38} baseDuration={12000} />
       </div>
